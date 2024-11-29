@@ -8,6 +8,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+/**
+ * Representa una entidad de alimento en el sistema
+ */
 @Entity
 @Getter @Setter
 @NoArgsConstructor
