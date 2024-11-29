@@ -20,10 +20,7 @@ public class Alimento {
     private Long id;
 
     private String nombre;
-    private String categoria; // enum?
-    private int tamanio;
+    private String tipo; // perecedero o no perecedero
+    private String estado; // abierto o cerrado
     private LocalDate fechaCaducidad;
-    private boolean estado; // enum?
-    private boolean perecedero;
-    // id seccion
 }
