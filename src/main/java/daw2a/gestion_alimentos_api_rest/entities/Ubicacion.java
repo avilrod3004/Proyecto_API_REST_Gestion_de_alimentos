@@ -14,12 +14,12 @@ import java.util.List;
 @AllArgsConstructor
 @ToString
 @Builder
-public class Almacen {
+public class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String nombre;
-    private Float temperatura;
-//    private List<Seccion> secciones;
+    private String descripcion;
+    private String tipoUbicacion; // alacena, nevera, congelador
+    private int capacidad;
 }
