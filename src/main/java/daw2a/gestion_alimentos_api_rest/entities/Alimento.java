@@ -22,8 +22,23 @@ public class Alimento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Nombre del alimento
+     */
     private String nombre;
-    private String tipo; // perecedero o no perecedero
-    private String estado; // abierto o cerrado
+
+    /**
+     * Perecedero o no perecedero
+     */
+    private String tipo;
+
+    /**
+     * Abierto o cerrado
+     */
+    private String estado;
+
+    /**
+     * Fecha en la que el alimento caduca
+     */
     private LocalDate fechaCaducidad;
 }

@@ -8,6 +8,9 @@ import lombok.*;
 
 import java.time.LocalDate;
 
+/**
+ * Representa una entidad de existencia en el sistema
+ */
 @Entity
 @Getter @Setter
 @AllArgsConstructor
@@ -19,8 +22,25 @@ public class Existencia {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * FOREIGN KEY
+     * Referenciada a Alimento.id
+     */
     private Long idAlimento;
+
+    /**
+     * FOREIGN KEY
+     * Referenciada a Ubicacion.id
+     */
     private Long idUbicacion;
+
+    /**
+     * Cantidad actual del alimento en la ubicación especificada
+     */
     private int cantidad;
+
+    /**
+     * Fecha en que el alimento fue colocado en esa ubicación
+     */
     private LocalDate fechaEntrada;
 }

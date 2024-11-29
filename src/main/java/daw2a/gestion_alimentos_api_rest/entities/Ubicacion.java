@@ -6,8 +6,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
-import java.util.List;
 
+/**
+ * Representa una entidad de ubicación en el sistema
+ */
 @Entity
 @Getter @Setter
 @NoArgsConstructor
@@ -19,7 +21,18 @@ public class Ubicacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Descripción detallada de la ubicación (ej., "balda superior en la alacena")
+     */
     private String descripcion;
-    private String tipoUbicacion; // alacena, nevera, congelador
+
+    /**
+     * Tipo general de la ubicación (alacena, nevera, congelador)
+     */
+    private String tipoUbicacion;
+
+    /**
+     * Capacidad máxima de almacenamiento en términos de cantidad de productos
+     */
     private int capacidad;
 }
