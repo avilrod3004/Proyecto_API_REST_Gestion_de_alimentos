@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -37,6 +38,7 @@ public class Existencia {
     /**
      * Cantidad actual del alimento en la ubicación especificada
      */
+    @Positive(message = "La cantidad debe ser un número positivo")
     private int cantidad;
 
     /**
