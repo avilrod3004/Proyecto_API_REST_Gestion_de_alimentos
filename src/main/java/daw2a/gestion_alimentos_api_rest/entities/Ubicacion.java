@@ -47,7 +47,7 @@ public class Ubicacion {
     @Positive(message = "La capacidad debe ser un valor positivo")
     @NotNull(message = "La cantidad no puede ser nula")
     @NotBlank(message = "La cantidad no puede estar vacía")
-    private int capacidad;
+    private Long capacidad;
 
     /**
      * Relación uno a muchos con existecnias

@@ -6,5 +6,5 @@ import lombok.Data;
 public class CrearUbicacionDTO {
     private String descripcion;
     private String tipoUbicacion;
-    private int capacidad;
+    private Long capacidad;
 }
