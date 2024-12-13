@@ -2,7 +2,7 @@ package daw2a.gestion_alimentos_api_rest.dto.existencia;
 
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class ExistenciaDTO {
@@ -12,5 +12,5 @@ public class ExistenciaDTO {
     private Long idUbicacion;
     private String descripcionUbicacion;
     private Long cantidad;
-    private LocalDateTime fechaEntrada;
+    private LocalDate fechaEntrada;
 }
