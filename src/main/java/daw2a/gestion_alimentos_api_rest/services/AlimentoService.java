@@ -108,7 +108,7 @@ public class AlimentoService {
      * @param alimento Entidad de alimento
      * @return DTO de alimento
      */
-    public AlimentoDTO convertirAAlimentoDTO(Alimento alimento) {
+    private AlimentoDTO convertirAAlimentoDTO(Alimento alimento) {
         AlimentoDTO alimentoDTO = new AlimentoDTO();
         alimentoDTO.setId(alimento.getId());
         alimentoDTO.setNombre(alimento.getNombre());
