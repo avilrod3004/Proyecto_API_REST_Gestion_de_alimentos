@@ -2,6 +2,8 @@ package daw2a.gestion_alimentos_api_rest.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
@@ -43,6 +45,8 @@ public class Existencia {
      * Cantidad actual del alimento en la ubicación especificada
      */
     @Positive(message = "La cantidad debe ser un número positivo")
+    @NotNull(message = "La cantidad no puede ser nula")
+    @NotBlank(message = "La cantidad no puede estar vacía")
     private int cantidad;
 
     /**
