@@ -10,7 +10,8 @@ import lombok.*;
 import java.time.LocalDate;
 
 /**
- * Representa una entidad de existencia en el sistema
+ * Representa un alimento y su ubicación en el sistema
+ * <p>Almacena información como el id del alimento, el id de su ubicación, la cantidad y la fecha de entrada</p>
  */
 @Entity
 @Getter @Setter
@@ -25,7 +26,7 @@ public class Existencia {
 
     /**
      * FOREIGN KEY
-     * Referenciada a Alimento.id
+     * Id del alimento
      */
     @ManyToOne
     @JoinColumn(name = "alimento_id")
@@ -34,7 +35,7 @@ public class Existencia {
 
     /**
      * FOREIGN KEY
-     * Referenciada a Ubicacion.id
+     * Id de la ubicación
      */
     @ManyToOne
     @JoinColumn(name = "ubicacion_id")

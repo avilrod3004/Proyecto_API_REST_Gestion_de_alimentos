@@ -5,13 +5,13 @@ import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.*;
 
-import java.beans.XMLEncoder;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Representa una entidad de alimento en el sistema
+ * Representa un alimento en el sistema
+ * <p>Almacena información como si es perecedero, si esta abierto y la fecha de caducidad</p>
  */
 @Entity
 @Getter @Setter

@@ -1,6 +1,7 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import daw2a.gestion_alimentos_api_rest.enums.TipoUbicacion;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,8 @@ import java.util.List;
 
 
 /**
- * Representa una entidad de ubicación en el sistema
+ * Representa una sección de los de un electrodomestico de almacenaje en el sistema
+ * <p>Esta entidad almacena información como la descripción, el tipo de ubicación y la capacidad</p>
  */
 @Entity
 @Getter @Setter
@@ -33,11 +35,12 @@ public class Ubicacion {
     private String descripcion;
 
     /**
-     * Tipo general de la ubicación (alacena, nevera, congelador)
+     * Tipo general de la ubicación
+     * <p>Alacena, nevera o congelador</p>
      */
     @NotNull(message = "El tipo de ubicación no puede ser nula")
     @NotBlank(message = "El tipo de ubicación no puede estar vacío")
-    private String tipoUbicacion;
+    private TipoUbicacion tipoUbicacion;
 
     /**
      * Capacidad máxima de almacenamiento en términos de cantidad de productos
