@@ -1,14 +1,14 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
 import jakarta.validation.constraints.*;
 
 import java.beans.XMLEncoder;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Representa una entidad de alimento en el sistema
@@ -23,6 +23,7 @@ public class Alimento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
 
     /**
      * Nombre del alimento
@@ -51,4 +52,11 @@ public class Alimento {
     @Future(message = "La fecha de caducidad debe ser una fecha futura")
     @NotNull(message = "La fecha de caduciadad no puede ser nula")
     private LocalDate fechaCaducidad;
+
+    /**
+     * Relación uno a muchos con existencias
+     */
+    @OneToMany(mappedBy = "alimento", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Existencia> existencias = new ArrayList<>();
 }

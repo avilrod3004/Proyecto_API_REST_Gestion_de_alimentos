@@ -1,9 +1,7 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
@@ -27,13 +25,19 @@ public class Existencia {
      * FOREIGN KEY
      * Referenciada a Alimento.id
      */
-    private Long idAlimento;
+    @ManyToOne
+    @JoinColumn(name = "alimento_id")
+    @JsonBackReference
+    private Alimento alimento;
 
     /**
      * FOREIGN KEY
      * Referenciada a Ubicacion.id
      */
-    private Long idUbicacion;
+    @ManyToOne
+    @JoinColumn(name = "ubicacion_id")
+    @JsonBackReference
+    private Ubicacion ubicacion;
 
     /**
      * Cantidad actual del alimento en la ubicación especificada

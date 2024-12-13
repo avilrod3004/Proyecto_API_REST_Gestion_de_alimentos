@@ -1,13 +1,14 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -45,4 +46,11 @@ public class Ubicacion {
     @NotNull(message = "La cantidad no puede ser nula")
     @NotBlank(message = "La cantidad no puede estar vacía")
     private int capacidad;
+
+    /**
+     * Relación uno a muchos con existecnias
+     */
+    @OneToMany(mappedBy = "ubicacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<Existencia> existencias = new ArrayList<>();
 }
