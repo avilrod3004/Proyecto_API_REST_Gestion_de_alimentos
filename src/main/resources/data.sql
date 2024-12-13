@@ -11,11 +11,11 @@ INSERT INTO alimento (nombre, tipo, estado, fecha_caducidad) VALUES
 
 -- Insertar datos en la tabla 'ubicacion'
 INSERT INTO ubicacion (descripcion, tipo_ubicacion, capacidad) VALUES
-('Estante superior de la alacena', 'Alacena', 50),
-('Bandeja media del refrigerador', 'Nevera', 20),
-('Cajón del congelador', 'Congelador', 30),
-('Estante inferior de la alacena', 'Alacena', 40),
-('Puerta del refrigerador', 'Nevera', 10);
+('Estante superior de la alacena', 'ALACENA', 50),
+('Bandeja media del refrigerador', 'NEVERA', 20),
+('Cajón del congelador', 'CONGELADOR', 30),
+('Estante inferior de la alacena', 'ALACENA', 40),
+('Puerta del refrigerador', 'NEVERA', 10);
 
 -- Insertar datos en la tabla 'existencia'
 INSERT INTO existencia (alimento_id, ubicacion_id, cantidad, fecha_entrada) VALUES
@@ -30,3 +30,8 @@ INSERT INTO existencia (alimento_id, ubicacion_id, cantidad, fecha_entrada) VALU
 (1, 5, 4, '2024-12-11'),  -- Manzana en la puerta del refrigerador
 (4, 5, 10, '2024-12-14'), -- Tomate en la puerta del refrigerador
 (8, 1, 5, '2024-11-10');  -- Harina en el estante superior de la alacena
+
+-- Insertar datos en la tabla 'usuario'
+INSERT INTO usuario (nombre, email, password, rol) VALUES
+('admin', 'admin@test.com', 'pestillo', 'ADMINISTRADOR'),
+('Rebeca', 'rebeca@test.com', 'pestillo', 'USUARIO')
