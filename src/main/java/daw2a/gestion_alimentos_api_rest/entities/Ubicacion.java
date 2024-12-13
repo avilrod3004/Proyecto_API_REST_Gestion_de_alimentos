@@ -1,7 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import daw2a.gestion_alimentos_api_rest.enums.TipoUbicacion;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -40,7 +39,7 @@ public class Ubicacion {
      */
     @NotNull(message = "El tipo de ubicación no puede ser nula")
     @NotBlank(message = "El tipo de ubicación no puede estar vacío")
-    private TipoUbicacion tipoUbicacion;
+    private String tipoUbicacion;
 
     /**
      * Capacidad máxima de almacenamiento en términos de cantidad de productos

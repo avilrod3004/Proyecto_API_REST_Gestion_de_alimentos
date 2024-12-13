@@ -1,6 +1,5 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
-import daw2a.gestion_alimentos_api_rest.enums.Rol;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -56,5 +55,5 @@ public class Usuario {
      */
     @NotNull(message = "El rol del usuario no puede ser nulo")
     @NotBlank(message = "El rol del usuario no puede estar vacío")
-    private Rol rol;
+    private String rol;
 }
