@@ -64,10 +64,6 @@ public class UbicacionService {
      * @return Espacio del tipo de ubicacion
      */
     public UbicacionEspacioDTO obtenerEscapcioPorTipoUbicacion(String tipoUbicacion) {
-//        Long espacioTotal = ubicacionRepository.sumCapacidadByTipoUbicacionContainingIgnoreCase(tipoUbicacion);
-//        Long espacioOcupado = existenciaRepository.sumCantidadByUbicacion_TipoUbicacionIgnoreCase(tipoUbicacion);
-//        Long espacioDisponible = espacioTotal - espacioOcupado;
-
         List<Ubicacion> ubicaciones = ubicacionRepository.findByTipoUbicacionContainingIgnoreCase(tipoUbicacion, null).getContent();
         Long espacioTotal = ubicaciones.stream()
                 .mapToLong(Ubicacion::getCapacidad)
@@ -88,13 +84,6 @@ public class UbicacionService {
         ubicacionEspacioDTO.setEspacioTotal(espacioTotal);
 
         return ubicacionEspacioDTO;
-    }
-
-    public Long calcularCapacidadTotalPorTipo(String tipoUbicacion) {
-        List<Ubicacion> ubicaciones = ubicacionRepository.findByTipoUbicacionContainingIgnoreCase(tipoUbicacion, null).getContent();
-        return ubicaciones.stream()
-                .mapToLong(Ubicacion::getCapacidad)
-                .sum();
     }
 
     /**
