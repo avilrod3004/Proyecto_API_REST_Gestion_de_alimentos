@@ -3,8 +3,11 @@ package daw2a.gestion_alimentos_api_rest.services;
 import daw2a.gestion_alimentos_api_rest.dto.ubicacion.CrearUbicacionDTO;
 import daw2a.gestion_alimentos_api_rest.dto.ubicacion.ModificarUbicacionDTO;
 import daw2a.gestion_alimentos_api_rest.dto.ubicacion.UbicacionDTO;
+import daw2a.gestion_alimentos_api_rest.dto.ubicacion.UbicacionEspacioDTO;
+import daw2a.gestion_alimentos_api_rest.entities.Existencia;
 import daw2a.gestion_alimentos_api_rest.entities.Ubicacion;
 import daw2a.gestion_alimentos_api_rest.exceptions.RecursoNoEncontradoException;
+import daw2a.gestion_alimentos_api_rest.repositories.ExistenciaRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.UbicacionRepository;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -12,12 +15,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UbicacionService {
     private final UbicacionRepository ubicacionRepository;
+    private final ExistenciaRepository existenciaRepository;
 
-    public UbicacionService(UbicacionRepository ubicacionRepository) {
+    public UbicacionService(UbicacionRepository ubicacionRepository, ExistenciaRepository existenciaRepository) {
         this.ubicacionRepository = ubicacionRepository;
+        this.existenciaRepository = existenciaRepository;
     }
 
     /**
@@ -49,6 +56,45 @@ public class UbicacionService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe la ubicacion con el id " + id));
 
         return convertirAUbicacionDTO(ubicacion);
+    }
+
+    /**
+     * Calcula la cantidad total, el espacio ocupado y disponible de un tipo de ubicación
+     * @param tipoUbicacion Tipo de ubicación (nevera, alacena o congelador)
+     * @return Espacio del tipo de ubicacion
+     */
+    public UbicacionEspacioDTO obtenerEscapcioPorTipoUbicacion(String tipoUbicacion) {
+//        Long espacioTotal = ubicacionRepository.sumCapacidadByTipoUbicacionContainingIgnoreCase(tipoUbicacion);
+//        Long espacioOcupado = existenciaRepository.sumCantidadByUbicacion_TipoUbicacionIgnoreCase(tipoUbicacion);
+//        Long espacioDisponible = espacioTotal - espacioOcupado;
+
+        List<Ubicacion> ubicaciones = ubicacionRepository.findByTipoUbicacionContainingIgnoreCase(tipoUbicacion, null).getContent();
+        Long espacioTotal = ubicaciones.stream()
+                .mapToLong(Ubicacion::getCapacidad)
+                .sum();
+
+
+        List<Existencia> existencias = existenciaRepository.findByUbicacion_TipoUbicacionIgnoreCase(tipoUbicacion, null).getContent();
+        Long espacioOcupado = existencias.stream()
+                .mapToLong(Existencia::getCantidad)
+                .sum();
+
+        Long espacioDisponible = espacioTotal - espacioOcupado;
+
+        UbicacionEspacioDTO ubicacionEspacioDTO = new UbicacionEspacioDTO();
+        ubicacionEspacioDTO.setTipoUbicacion(tipoUbicacion);
+        ubicacionEspacioDTO.setEspacioDisponible(espacioDisponible);
+        ubicacionEspacioDTO.setEspacioOcupado(espacioOcupado);
+        ubicacionEspacioDTO.setEspacioTotal(espacioTotal);
+
+        return ubicacionEspacioDTO;
+    }
+
+    public Long calcularCapacidadTotalPorTipo(String tipoUbicacion) {
+        List<Ubicacion> ubicaciones = ubicacionRepository.findByTipoUbicacionContainingIgnoreCase(tipoUbicacion, null).getContent();
+        return ubicaciones.stream()
+                .mapToLong(Ubicacion::getCapacidad)
+                .sum();
     }
 
     /**

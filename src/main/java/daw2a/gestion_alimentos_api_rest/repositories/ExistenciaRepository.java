@@ -19,4 +19,6 @@ public interface ExistenciaRepository extends JpaRepository<Existencia, Long> {
 
     Page<Existencia> findByAlimento_FechaCaducidadBetween(LocalDate fechaInicio, LocalDate fechaFin, Pageable pageable);
 
+    Page<Existencia> findByUbicacion_TipoUbicacionIgnoreCase(String tipoUbicacion, Pageable pageable);
+
 }

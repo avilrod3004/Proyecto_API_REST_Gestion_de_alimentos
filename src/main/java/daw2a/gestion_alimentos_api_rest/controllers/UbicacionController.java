@@ -3,6 +3,7 @@ package daw2a.gestion_alimentos_api_rest.controllers;
 import daw2a.gestion_alimentos_api_rest.dto.ubicacion.CrearUbicacionDTO;
 import daw2a.gestion_alimentos_api_rest.dto.ubicacion.ModificarUbicacionDTO;
 import daw2a.gestion_alimentos_api_rest.dto.ubicacion.UbicacionDTO;
+import daw2a.gestion_alimentos_api_rest.dto.ubicacion.UbicacionEspacioDTO;
 import daw2a.gestion_alimentos_api_rest.services.UbicacionService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -41,6 +42,17 @@ public class UbicacionController {
     public ResponseEntity<UbicacionDTO> obtenerUbicacion(@PathVariable Long id) {
         UbicacionDTO ubicacion = ubicacionService.obtenerUbicacion(id);
         return ResponseEntity.ok(ubicacion);
+    }
+
+    /**
+     * Informe de la capacidad total de un tipo de ubicación, la capacidad ocupada y la parte disponible
+     * @param tipoUbicacion Tipo de ubicacion (nevera, congelador y alacena)
+     * @return Espacio del tipo de ubicación
+     */
+    @GetMapping("/espacio/{tipoUbicacion}")
+    public ResponseEntity<UbicacionEspacioDTO> obtenerEscapcioPorTipoUbicacion(@PathVariable String tipoUbicacion) {
+        UbicacionEspacioDTO ubicacionEspacioDTO = ubicacionService.obtenerEscapcioPorTipoUbicacion(tipoUbicacion);
+        return ResponseEntity.ok(ubicacionEspacioDTO);
     }
 
     /**
