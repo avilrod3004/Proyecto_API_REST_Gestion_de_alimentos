@@ -75,13 +75,13 @@ public class AlimentoService {
         Alimento alimento = alimentoRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("Alimento con id " + id + " no encontrado"));
 
-        if (modificarAlimentoDTO.getNombre() != null) {
+        if (modificarAlimentoDTO.getNombre() != null && !modificarAlimentoDTO.getNombre().isEmpty()) {
             alimento.setNombre(modificarAlimentoDTO.getNombre());
         }
-        if (modificarAlimentoDTO.getTipo() != null) {
+        if (modificarAlimentoDTO.getTipo() != null && !modificarAlimentoDTO.getTipo().isEmpty()) {
             alimento.setTipo(modificarAlimentoDTO.getTipo());
         }
-        if (modificarAlimentoDTO.getEstado() != null) {
+        if (modificarAlimentoDTO.getEstado() != null && !modificarAlimentoDTO.getEstado().isEmpty()) {
             alimento.setEstado(modificarAlimentoDTO.getEstado());
         }
         if (modificarAlimentoDTO.getFechaCaducidad() != null) {
