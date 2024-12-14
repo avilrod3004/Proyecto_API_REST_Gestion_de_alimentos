@@ -10,6 +10,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class AlimentoService {
     private final AlimentoRepository alimentoRepository;
@@ -33,6 +35,18 @@ public class AlimentoService {
             alimentos = alimentoRepository.findAll(pageable);
         }
 
+        return alimentos.map(this::convertirAAlimentoDTO);
+    }
+
+    /**
+     * Lista los alimentos que su fecha de caducidad este dentro del rango
+     * @param fechaInicio Fecha de inicio del rango
+     * @param fechaFin Fecha de fin del rango
+     * @param pageable Configuración de paginación
+     * @return Listado de alimentos
+     */
+    public Page<AlimentoDTO> listarEntreFechasCaducidad(LocalDate fechaInicio, LocalDate fechaFin, Pageable pageable) {
+        Page<Alimento> alimentos = alimentoRepository.findByFechaCaducidadBetween(fechaInicio, fechaFin, pageable);
         return alimentos.map(this::convertirAAlimentoDTO);
     }
 

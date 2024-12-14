@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/alimentos")
 public class AlimentoController {
@@ -30,6 +32,12 @@ public class AlimentoController {
     public ResponseEntity<Page<?>> listarAlimentos(@RequestParam(required = false) String nombre, Pageable pageable) {
         Page<?> alimentos = alimentoService.listarAlimentos(nombre, pageable);
         return ResponseEntity.ok(alimentos);
+    }
+
+    @GetMapping("/caducan")
+    public ResponseEntity<Page<AlimentoDTO>> listarAlimentosCaducan(Pageable pageable) {
+        Page<AlimentoDTO> alimentosCaducan = alimentoService.listarEntreFechasCaducidad(LocalDate.now(),LocalDate.now().plusWeeks(1), pageable);
+        return ResponseEntity.ok(alimentosCaducan);
     }
 
     /**
