@@ -54,6 +54,16 @@ public class GlobalExceptioHandler {
     }
 
     /**
+     * Manejador para cuando al crear una existencia, la ubicacion esta llena
+     * @param ex
+     * @return
+     */
+    @ExceptionHandler(UbicacionLlenaException.class)
+    public ResponseEntity<String> handleUbicacionLlenaException(UbicacionLlenaException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
+    /**
      * Manejador para errores de elemento no encontrado no such element
      * @param ex
      * @return
