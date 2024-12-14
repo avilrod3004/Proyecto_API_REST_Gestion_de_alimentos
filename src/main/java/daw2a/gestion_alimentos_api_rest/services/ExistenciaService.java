@@ -1,10 +1,12 @@
 package daw2a.gestion_alimentos_api_rest.services;
 
 import daw2a.gestion_alimentos_api_rest.dto.existencia.*;
+import daw2a.gestion_alimentos_api_rest.dto.ubicacion.UbicacionEspacioDTO;
 import daw2a.gestion_alimentos_api_rest.entities.Alimento;
 import daw2a.gestion_alimentos_api_rest.entities.Existencia;
 import daw2a.gestion_alimentos_api_rest.entities.Ubicacion;
 import daw2a.gestion_alimentos_api_rest.exceptions.RecursoNoEncontradoException;
+import daw2a.gestion_alimentos_api_rest.exceptions.UbicacionLlenaException;
 import daw2a.gestion_alimentos_api_rest.repositories.AlimentoRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.ExistenciaRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.UbicacionRepository;
@@ -16,17 +18,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class ExistenciaService {
     private final ExistenciaRepository existenciaRepository;
     private final AlimentoRepository alimentoRepository;
     private final UbicacionRepository ubicacionRepository;
+    private final UbicacionService ubicacionService;
 
-    public ExistenciaService(ExistenciaRepository existenciaRepository, AlimentoRepository alimentoRepository, UbicacionRepository ubicacionRepository) {
+    public ExistenciaService(ExistenciaRepository existenciaRepository, AlimentoRepository alimentoRepository, UbicacionRepository ubicacionRepository, UbicacionService ubicacionService) {
         this.existenciaRepository = existenciaRepository;
         this.alimentoRepository = alimentoRepository;
         this.ubicacionRepository = ubicacionRepository;
+        this.ubicacionService = ubicacionService;
     }
 
     /**
@@ -92,6 +97,17 @@ public class ExistenciaService {
 
         Ubicacion ubicacion = ubicacionRepository.findById(nuevaExistencia.getIdUbicacion())
                 .orElseThrow(() -> new RecursoNoEncontradoException("Ubicacion con id " + nuevaExistencia.getIdUbicacion() + " no encontrada"));
+
+
+        Long capacidadUbicacion = ubicacion.getCapacidad();
+        List<Existencia> existenciasMismaUbicacion = existenciaRepository.findByUbicacion_Id(ubicacion.getId(), null).getContent();
+        Long capacidadOcupada = existenciasMismaUbicacion.stream()
+                .mapToLong(Existencia::getCantidad)
+                .sum();
+
+        if (capacidadOcupada + nuevaExistencia.getCantidad() > capacidadUbicacion) {
+            throw new UbicacionLlenaException("La ubicacion con descripcion " + ubicacion.getDescripcion() + " esta llena");
+        }
 
         Existencia existencia = Existencia.builder()
                 .alimento(alimento)

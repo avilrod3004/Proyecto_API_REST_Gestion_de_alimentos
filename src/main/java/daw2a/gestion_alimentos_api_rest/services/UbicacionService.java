@@ -9,8 +9,6 @@ import daw2a.gestion_alimentos_api_rest.entities.Ubicacion;
 import daw2a.gestion_alimentos_api_rest.exceptions.RecursoNoEncontradoException;
 import daw2a.gestion_alimentos_api_rest.repositories.ExistenciaRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.UbicacionRepository;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
