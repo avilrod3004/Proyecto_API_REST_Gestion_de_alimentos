@@ -28,7 +28,7 @@ public class UsuarioController {
      * @return Listado de usuarios
      */
     @GetMapping
-    public ResponseEntity<Page<UsuarioDTO>> findAll(@RequestParam(required = false) String nombre, Pageable pageable) {
+    public ResponseEntity<Page<UsuarioDTO>> listarUsuarios(@RequestParam(required = false) String nombre, Pageable pageable) {
         Page<UsuarioDTO> usuarios = usuarioService.listarUsuarios(nombre, pageable);
         return ResponseEntity.ok(usuarios);
     }
