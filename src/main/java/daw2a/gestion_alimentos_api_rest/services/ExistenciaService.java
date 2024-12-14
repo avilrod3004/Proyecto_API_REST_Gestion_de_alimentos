@@ -1,9 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.services;
 
-import daw2a.gestion_alimentos_api_rest.dto.existencia.CrearExistenciaDTO;
-import daw2a.gestion_alimentos_api_rest.dto.existencia.ExistenciaDTO;
-import daw2a.gestion_alimentos_api_rest.dto.existencia.ModificarExistenciaDTO;
-import daw2a.gestion_alimentos_api_rest.dto.existencia.MoverExistenciaDTO;
+import daw2a.gestion_alimentos_api_rest.dto.existencia.*;
 import daw2a.gestion_alimentos_api_rest.entities.Alimento;
 import daw2a.gestion_alimentos_api_rest.entities.Existencia;
 import daw2a.gestion_alimentos_api_rest.entities.Ubicacion;
@@ -11,10 +8,10 @@ import daw2a.gestion_alimentos_api_rest.exceptions.RecursoNoEncontradoException;
 import daw2a.gestion_alimentos_api_rest.repositories.AlimentoRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.ExistenciaRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.UbicacionRepository;
-import daw2a.gestion_alimentos_api_rest.repositories.UsuarioRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,6 +48,22 @@ public class ExistenciaService {
         }
 
         return existencias.map(this::convertirAExistenciaDTO);
+    }
+
+    /**
+     * Listar existencias que caducan dentro de un rango de fechas y agrupados por su ubicación
+     * @param size Número de existencias por página
+     * @param fechaInicio Fecha de inicio del rango
+     * @param fechaFin Fecha de fin del rango
+     * @return Listado de existencias
+     */
+    public Page<ExistenciaDetallesDTO> listadoCaducanPorUbicacion(int size, LocalDate fechaInicio, LocalDate fechaFin) {
+        int page = 0;
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("ubicacion.tipoUbicacion").ascending());
+        Page<Existencia> existencias = existenciaRepository.findByAlimento_FechaCaducidadBetween(fechaInicio, fechaFin, pageable);
+
+        return existencias.map(this::convertirAExistenciaDetallesDTO);
     }
 
     /**
@@ -179,14 +192,42 @@ public class ExistenciaService {
      */
     private ExistenciaDTO convertirAExistenciaDTO(Existencia existencia) {
         ExistenciaDTO existenciaDTO = new ExistenciaDTO();
+
         existenciaDTO.setId(existencia.getId());
+
         existenciaDTO.setIdAlimento(existencia.getAlimento().getId());
         existenciaDTO.setNombreAlimento(existencia.getAlimento().getNombre());
+
         existenciaDTO.setIdUbicacion(existencia.getUbicacion().getId());
         existenciaDTO.setDescripcionUbicacion(existencia.getUbicacion().getDescripcion());
+
         existenciaDTO.setCantidad(existencia.getCantidad());
         existenciaDTO.setFechaEntrada(existencia.getFechaEntrada());
 
         return existenciaDTO;
+    }
+
+    /**
+     * Convertir de Existencia a ExistenciaDetallesDTO
+     * @param existencia Entidad existencia
+     * @return DTO con detalles extra de la existencia
+     */
+    private ExistenciaDetallesDTO convertirAExistenciaDetallesDTO(Existencia existencia) {
+        ExistenciaDetallesDTO existenciaDetallesDTO = new ExistenciaDetallesDTO();
+
+        existenciaDetallesDTO.setId(existencia.getId());
+
+        existenciaDetallesDTO.setIdAlimento(existencia.getAlimento().getId());
+        existenciaDetallesDTO.setNombreAlimento(existencia.getAlimento().getNombre());
+        existenciaDetallesDTO.setFechaCaducidad(existencia.getAlimento().getFechaCaducidad());
+
+        existenciaDetallesDTO.setIdUbicacion(existencia.getUbicacion().getId());
+        existenciaDetallesDTO.setDescripcionUbicacion(existencia.getUbicacion().getDescripcion());
+        existenciaDetallesDTO.setTipoUbicacion(existencia.getUbicacion().getTipoUbicacion());
+
+        existenciaDetallesDTO.setCantidad(existencia.getCantidad());
+        existenciaDetallesDTO.setFechaEntrada(existencia.getFechaEntrada());
+
+        return existenciaDetallesDTO;
     }
 }

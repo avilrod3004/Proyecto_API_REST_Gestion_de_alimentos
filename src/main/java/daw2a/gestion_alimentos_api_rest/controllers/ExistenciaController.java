@@ -1,9 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.controllers;
 
-import daw2a.gestion_alimentos_api_rest.dto.existencia.CrearExistenciaDTO;
-import daw2a.gestion_alimentos_api_rest.dto.existencia.ExistenciaDTO;
-import daw2a.gestion_alimentos_api_rest.dto.existencia.ModificarExistenciaDTO;
-import daw2a.gestion_alimentos_api_rest.dto.existencia.MoverExistenciaDTO;
+import daw2a.gestion_alimentos_api_rest.dto.existencia.*;
 import daw2a.gestion_alimentos_api_rest.entities.Existencia;
 import daw2a.gestion_alimentos_api_rest.services.ExistenciaService;
 import jakarta.validation.Valid;
@@ -13,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.w3c.dom.css.ElementCSSInlineStyle;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/existencias")
@@ -33,6 +32,17 @@ public class ExistenciaController {
     @GetMapping
     public ResponseEntity<Page<ExistenciaDTO>> listarExistencias(@RequestParam(required = false) Long idAlimento, @RequestParam(required = false) Long idUbicacion, Pageable pageable) {
         Page<ExistenciaDTO> existencias = existenciaService.listarExistencias(idAlimento, idUbicacion, pageable);
+        return ResponseEntity.ok(existencias);
+    }
+
+    /**
+     * Listar las existencias proximas a caducar agrupadas por ubicación
+     * @param size Número de existencias por página
+     * @return Listado de existencias
+     */
+    @GetMapping("/caducan/{size}")
+    public ResponseEntity<Page<ExistenciaDetallesDTO>> listarCaducanPorUbicacion(@PathVariable int size) {
+        Page<ExistenciaDetallesDTO> existencias = existenciaService.listadoCaducanPorUbicacion(size, LocalDate.now(), LocalDate.now().plusWeeks(2));
         return ResponseEntity.ok(existencias);
     }
 
