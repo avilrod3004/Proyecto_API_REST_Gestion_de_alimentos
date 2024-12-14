@@ -6,6 +6,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import java.util.List;
+
 /**
  * Configuración global de CORS (Cross-Origin Resource Sharing) para permitir que
  * el frontend (u otras aplicaciones) accedan a recursos de este backend.
@@ -25,7 +27,7 @@ public class WebConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:3000"); // Dominio permitido (cambiar según el dominio de frontend)
         config.addAllowedHeader("*"); // Permite todos los headers
-        config.addAllowedMethod("*"); // Permite todos los métodos (GET, POST, PUT, DELETE, etc.)
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowCredentials(true); // Permite credenciales (cookies, etc.)
         config.setMaxAge(3600L); // Tiempo de vida de la configuración
 
