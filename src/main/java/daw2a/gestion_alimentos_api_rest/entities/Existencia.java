@@ -47,7 +47,6 @@ public class Existencia {
      */
     @Positive(message = "La cantidad debe ser un número positivo")
     @NotNull(message = "La cantidad no puede ser nula")
-    @NotBlank(message = "La cantidad no puede estar vacía")
     private Long cantidad;
 
     /**
