@@ -29,21 +29,18 @@ public class Alimento {
      * Nombre del alimento
      */
     @NotBlank(message = "El nombre del alimento no puede estar vacío")
-    @NotNull(message = "El nombre del alimento no puede ser nulo")
     private String nombre;
 
     /**
      * Perecedero o no perecedero
      */
     @NotBlank(message = "El tipo de alimento no puede estar vacío")
-    @NotNull(message = "El tipo de alimento no puede ser nulo")
     private String tipo;
 
     /**
      * Abierto o cerrado
      */
     @NotBlank(message = "El estado del alimento no puede estar vacío")
-    @NotNull(message = "El estado del alimento no puede ser nulo")
     private String estado;
 
     /**
