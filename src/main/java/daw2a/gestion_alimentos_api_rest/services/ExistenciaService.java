@@ -3,6 +3,7 @@ package daw2a.gestion_alimentos_api_rest.services;
 import daw2a.gestion_alimentos_api_rest.dto.existencia.CrearExistenciaDTO;
 import daw2a.gestion_alimentos_api_rest.dto.existencia.ExistenciaDTO;
 import daw2a.gestion_alimentos_api_rest.dto.existencia.ModificarExistenciaDTO;
+import daw2a.gestion_alimentos_api_rest.dto.existencia.MoverExistenciaDTO;
 import daw2a.gestion_alimentos_api_rest.entities.Alimento;
 import daw2a.gestion_alimentos_api_rest.entities.Existencia;
 import daw2a.gestion_alimentos_api_rest.entities.Ubicacion;
@@ -103,6 +104,25 @@ public class ExistenciaService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("Existencia con el id " + id + " no encontrada"));
 
         existencia.setCantidad(modificarExistenciaDTO.getCantidad());
+        return convertirAExistenciaDTO(existenciaRepository.save(existencia));
+    }
+
+    /**
+     * Mover existencia de ubicación
+     * @param id Identificador de la existencia
+     * @param moverExistenciaDTO Datos de la ubicación nueva
+     * @return Detalles actualizados
+     * @throws RecursoNoEncontradoException Si no existe una existencia con ese id o una ubicacion con ese id
+     */
+    @Transactional
+    public ExistenciaDTO moverExistencia(Long id, MoverExistenciaDTO moverExistenciaDTO) {
+        Existencia existencia = existenciaRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException("Existencia con el id " + id + " no encontrada"));
+
+        Ubicacion ubicacion = ubicacionRepository.findById(moverExistenciaDTO.getIdUbicacion())
+                .orElseThrow(() -> new RecursoNoEncontradoException("Ubicacion con el id " + id + " no encontrada"));
+
+        existencia.setUbicacion(ubicacion);
         return convertirAExistenciaDTO(existenciaRepository.save(existencia));
     }
 

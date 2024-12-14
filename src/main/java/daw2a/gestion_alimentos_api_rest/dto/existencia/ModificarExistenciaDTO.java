@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 public class ModificarExistenciaDTO {
-    @NotNull
+    @NotNull(message = "La cantidad no puede estar vacía")
     private Long cantidad;
 }

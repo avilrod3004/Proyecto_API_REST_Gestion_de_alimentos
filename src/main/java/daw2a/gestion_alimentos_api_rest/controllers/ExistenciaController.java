@@ -3,6 +3,7 @@ package daw2a.gestion_alimentos_api_rest.controllers;
 import daw2a.gestion_alimentos_api_rest.dto.existencia.CrearExistenciaDTO;
 import daw2a.gestion_alimentos_api_rest.dto.existencia.ExistenciaDTO;
 import daw2a.gestion_alimentos_api_rest.dto.existencia.ModificarExistenciaDTO;
+import daw2a.gestion_alimentos_api_rest.dto.existencia.MoverExistenciaDTO;
 import daw2a.gestion_alimentos_api_rest.entities.Existencia;
 import daw2a.gestion_alimentos_api_rest.services.ExistenciaService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.w3c.dom.css.ElementCSSInlineStyle;
 
 @RestController
 @RequestMapping("/existencias")
@@ -65,6 +67,18 @@ public class ExistenciaController {
     @PutMapping("/{id}")
     public ResponseEntity<ExistenciaDTO> actualizarExistencia(@PathVariable Long id, @RequestBody @Valid ModificarExistenciaDTO modificarExistenciaDTO) {
         ExistenciaDTO existenciaDTO = existenciaService.actualizarCantidad(id, modificarExistenciaDTO);
+        return ResponseEntity.ok(existenciaDTO);
+    }
+
+    /**
+     * Mover una existencia de ubicación
+     * @param id Identificador de la existencia
+     * @param moverExistenciaDTO Identificador de la nueva ubicacion
+     * @return Existencia actualizada
+     */
+    @PutMapping("/mover/{id}")
+    public ResponseEntity<ExistenciaDTO> moverExistencia(@PathVariable Long id, @RequestBody @Valid MoverExistenciaDTO moverExistenciaDTO) {
+        ExistenciaDTO existenciaDTO = existenciaService.moverExistencia(id, moverExistenciaDTO);
         return ResponseEntity.ok(existenciaDTO);
     }
 
