@@ -1,5 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
+import daw2a.gestion_alimentos_api_rest.Rol;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -30,7 +31,6 @@ public class Usuario {
      * Nombre del usuario
      * <p>No debe ser nulo ni estar vacío</p>
      */
-    @NotNull(message = "El nombre del usuario no puede ser nulo")
     @NotBlank(message = "El nombre del usuario no puede estar vacío")
     private String nombre;
 
@@ -39,13 +39,13 @@ public class Usuario {
      * <p>Usando para autenticación</p>
      */
     @Email
-    @Column(unique = true)
+    @NotBlank(message = "El email no puede estar vacío")
+    @Column(unique = true, nullable = false)
     private String email;
 
     /**
      * Contraseña de la cuenta del usuario
      */
-    @NotNull(message = "La contraseña del usuario no puede ser nula")
     @NotBlank(message = "La contraseña no puede estar vacía")
     private String password;
 
@@ -54,6 +54,6 @@ public class Usuario {
      * <p>Define los permisos del usuario</p>
      */
     @NotNull(message = "El rol del usuario no puede ser nulo")
-    @NotBlank(message = "El rol del usuario no puede estar vacío")
-    private String rol;
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 }
