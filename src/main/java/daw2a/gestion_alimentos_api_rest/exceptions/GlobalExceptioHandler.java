@@ -15,4 +15,14 @@ public class GlobalExceptioHandler {
     public ResponseEntity<String> handleRecursoNoEncontradoException(RecursoNoEncontradoException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    /**
+     * Manejador para errores de recurso duplicado
+     * @param ex Excepcion
+     * @return
+     */
+    @ExceptionHandler(RecursoDuplicadoException.class)
+    public ResponseEntity<String> handleRecursoDuplicadoException(RecursoDuplicadoException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
 }
