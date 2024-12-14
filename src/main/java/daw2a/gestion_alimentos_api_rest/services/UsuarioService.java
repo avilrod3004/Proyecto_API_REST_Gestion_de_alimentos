@@ -78,12 +78,12 @@ public class UsuarioService {
     }
 
     /**
-     * Registrar un usuario nuevo en el sistema
+     * Crear un usuario nuevo en el sistema
      * @param crearUsuarioDTO Datos para crear el usuario
      * @return Detalles del usuario creado
      * @throws RecursoDuplicadoException Si el email ya está en uso
      */
-    public UsuarioDetallesDTO registrarUsuario(CrearUsuarioDTO crearUsuarioDTO) {
+    public UsuarioDetallesDTO crearUsuario(CrearUsuarioDTO crearUsuarioDTO) {
         if (usuarioRepository.findUsuarioByEmail(crearUsuarioDTO.getEmail()).isPresent()) {
             throw new RecursoDuplicadoException("El email " + crearUsuarioDTO.getEmail() + " ya está en uso.");
         }
@@ -95,6 +95,28 @@ public class UsuarioService {
         usuario.setRol(Rol.valueOf(crearUsuarioDTO.getRol().toUpperCase()));
 
         return convertirAUsuarioDetallesDTO(usuarioRepository.save(usuario));
+    }
+
+    /**
+     * Registra un nuevo usuario en el sistema.
+     *
+     * @param crearUsuarioDTO Datos para registrar un nuevo usuario
+     * @return Entidad de usuario registrada
+     * @throws RecursoDuplicadoException Si el email ya está en uso
+     */
+    public Usuario registrarUsuario(CrearUsuarioDTO crearUsuarioDTO) {
+        if (usuarioRepository.findUsuarioByEmail(crearUsuarioDTO.getEmail()).isPresent()) {
+            throw new RecursoDuplicadoException("El email " + crearUsuarioDTO.getEmail() + " ya está en uso.");
+        }
+
+        Usuario usuario = new Usuario();
+        usuario.setNombre(crearUsuarioDTO.getNombre());
+        usuario.setEmail(crearUsuarioDTO.getEmail());
+        usuario.setPassword(passwordEncoder.encode(crearUsuarioDTO.getPassword()));
+        usuario.setRol(Rol.valueOf(crearUsuarioDTO.getRol().toUpperCase()));
+
+        // Guardar y devolver el usuario
+        return usuarioRepository.save(usuario);
     }
 
     /**

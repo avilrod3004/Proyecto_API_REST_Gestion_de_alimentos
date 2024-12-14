@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,6 +29,7 @@ public class UsuarioController {
      * @return Listado de usuarios
      */
     @GetMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Page<UsuarioDTO>> listarUsuarios(@RequestParam(required = false) String nombre, Pageable pageable) {
         Page<UsuarioDTO> usuarios = usuarioService.listarUsuarios(nombre, pageable);
         return ResponseEntity.ok(usuarios);
@@ -39,6 +41,7 @@ public class UsuarioController {
      * @return Detalles del usuario
      */
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<UsuarioDetallesDTO> obtenerUsuario(@PathVariable Long id) {
         UsuarioDetallesDTO usuario = usuarioService.buscarUsuarioPorId(id);
         return ResponseEntity.ok(usuario);
@@ -50,6 +53,7 @@ public class UsuarioController {
      * @return Detalles del usuario
      */
     @GetMapping("/email")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<UsuarioDetallesDTO> obtenerUsuarioPorEmail(@RequestParam String email) {
         UsuarioDetallesDTO usuario = usuarioService.buscarUsuarioPorEmail(email);
         return ResponseEntity.ok(usuario);
@@ -61,8 +65,9 @@ public class UsuarioController {
      * @return Detalles del usuario
      */
     @PostMapping
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<UsuarioDetallesDTO> registrarUsuario(@RequestBody @Valid CrearUsuarioDTO crearUsuarioDTO) {
-        UsuarioDetallesDTO usuario = usuarioService.registrarUsuario(crearUsuarioDTO);
+        UsuarioDetallesDTO usuario = usuarioService.crearUsuario(crearUsuarioDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuario);
     }
 
@@ -73,6 +78,7 @@ public class UsuarioController {
      * @return Usuario actualizado
      */
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<UsuarioDetallesDTO> actualizarUsuario(@PathVariable Long id, @RequestBody @Valid ModificarUsuarioDTO modificarUsuarioDTO) {
         UsuarioDetallesDTO usuario = usuarioService.editarUsuario(id, modificarUsuarioDTO);
         return ResponseEntity.ok(usuario);
@@ -84,6 +90,7 @@ public class UsuarioController {
      * @return
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMINISTRADOR')")
     public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
