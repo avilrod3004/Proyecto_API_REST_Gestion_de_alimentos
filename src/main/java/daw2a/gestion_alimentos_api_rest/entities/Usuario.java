@@ -1,6 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.entities;
 
-import daw2a.gestion_alimentos_api_rest.Rol;
+import daw2a.gestion_alimentos_api_rest.enums.Rol;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -1,6 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.services;
 
-import daw2a.gestion_alimentos_api_rest.Rol;
+import daw2a.gestion_alimentos_api_rest.enums.Rol;
 import daw2a.gestion_alimentos_api_rest.dto.usuario.CrearUsuarioDTO;
 import daw2a.gestion_alimentos_api_rest.dto.usuario.ModificarUsuarioDTO;
 import daw2a.gestion_alimentos_api_rest.dto.usuario.UsuarioDTO;
