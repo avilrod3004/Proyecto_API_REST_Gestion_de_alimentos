@@ -76,10 +76,10 @@ public class UbicacionService {
         Ubicacion ubicacion = ubicacionRepository.findById(id)
                 .orElseThrow(() -> new RecursoNoEncontradoException("No existe la ubicacion con el id " + id));
 
-        if (modificarUbicacionDTO.getDescripcion() != null) {
+        if (modificarUbicacionDTO.getDescripcion() != null && !modificarUbicacionDTO.getDescripcion().isEmpty()) {
             ubicacion.setDescripcion(modificarUbicacionDTO.getDescripcion());
         }
-        if (modificarUbicacionDTO.getTipoUbicacion() != null) {
+        if (modificarUbicacionDTO.getTipoUbicacion() != null && !modificarUbicacionDTO.getTipoUbicacion().isEmpty()) {
             ubicacion.setTipoUbicacion(modificarUbicacionDTO.getTipoUbicacion());
         }
         if (modificarUbicacionDTO.getCapacidad() != null) {
