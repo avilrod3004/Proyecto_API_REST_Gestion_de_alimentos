@@ -22,18 +22,20 @@ public class ExistenciaController {
     }
 
     /**
-     * Listar todas las existencias
+     * Listar todas las existencias, por id de Alimento y/o por id de la ubicación
+     * @param idAlimento Identificador del alimento
+     * @param idUbicacion Identificador de la ubicacion
      * @param pageable Pageable
      * @return Listado de las existencias
      */
     @GetMapping
-    public ResponseEntity<Page<ExistenciaDTO>> listarExistencias(Pageable pageable) {
-        Page<ExistenciaDTO> existencias = existenciaService.listarExistencias(pageable);
+    public ResponseEntity<Page<ExistenciaDTO>> listarExistencias(@RequestParam(required = false) Long idAlimento, @RequestParam(required = false) Long idUbicacion, Pageable pageable) {
+        Page<ExistenciaDTO> existencias = existenciaService.listarExistencias(idAlimento, idUbicacion, pageable);
         return ResponseEntity.ok(existencias);
     }
 
     /**
-     * Obtener los detalles de un existencia
+     * Obtener los detalles de una existencia
      * @param id Identificador de la existencia
      * @return Existencia
      */

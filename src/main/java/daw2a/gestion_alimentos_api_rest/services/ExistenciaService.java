@@ -32,12 +32,24 @@ public class ExistenciaService {
     }
 
     /**
-     * Listar todas las existencias
+     * Listar todas las existencias, por id de alimento y/o por id de la ubicacion
      * @param pageable Pageable
      * @return Listado de existencias
      */
-    public Page<ExistenciaDTO> listarExistencias(Pageable pageable) {
-        return existenciaRepository.findAll(pageable).map(this::convertirAExistenciaDTO);
+    public Page<ExistenciaDTO> listarExistencias(Long idAlimento, Long idUbicacion, Pageable pageable) {
+        Page<Existencia> existencias;
+
+        if (idAlimento != null && idUbicacion != null) {
+            existencias = existenciaRepository.findByAlimento_IdAndUbicacion_Id(idAlimento, idUbicacion, pageable);
+        } else if (idAlimento != null) {
+            existencias = existenciaRepository.findByAlimento_Id(idAlimento, pageable);
+        } else if (idUbicacion != null) {
+            existencias = existenciaRepository.findByUbicacion_Id(idUbicacion, pageable);
+        } else {
+            existencias = existenciaRepository.findAll(pageable);
+        }
+
+        return existencias.map(this::convertirAExistenciaDTO);
     }
 
     /**
@@ -114,12 +126,10 @@ public class ExistenciaService {
         // Obtener la existencia más antigua (primer elemento de la página)
         Existencia existencia = existenciasPage.getContent().get(0);
 
-        // Verificar si hay suficiente cantidad disponible
         if (existencia.getCantidad() < cantidad) {
             throw new RuntimeException("No hay suficiente cantidad en la existencia más antigua.");
         }
 
-        // Reducir la cantidad de la existencia
         existencia.setCantidad(existencia.getCantidad() - cantidad);
 
         if (existencia.getCantidad() == 0) {
