@@ -12,6 +12,7 @@ import daw2a.gestion_alimentos_api_rest.repositories.ExistenciaRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.UbicacionRepository;
 import daw2a.gestion_alimentos_api_rest.repositories.UsuarioRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +92,42 @@ public class ExistenciaService {
 
         existencia.setCantidad(modificarExistenciaDTO.getCantidad());
         return convertirAExistenciaDTO(existenciaRepository.save(existencia));
+    }
+
+    /**
+     * Consume una existencia de un alimento en una ubicación.
+     * Reduce la cantidad del alimento en la ubicación seleccionada, priorizando la existencia con la fecha más antigua.
+     * @param idAlimento Id del alimento
+     * @param idUbicacion Id de la ubicación
+     * @param cantidad Cantidad a consumir
+     * @return Existencia actualizada
+     */
+    @Transactional
+    public ExistenciaDTO consumirExistencia(Long idAlimento, Long idUbicacion, Long cantidad) {
+        // Obtener las existencias del alimento en la ubicación, ordenadas por fecha de entrada (ascendente)
+        Page<Existencia> existenciasPage = existenciaRepository.findByAlimento_IdAndUbicacion_IdOrderByFechaEntradaAsc(idAlimento, idUbicacion, PageRequest.of(0, 1));
+
+        if (existenciasPage.isEmpty()) {
+            throw new RuntimeException("No hay existencias disponibles para este alimento en la ubicación.");
+        }
+
+        // Obtener la existencia más antigua (primer elemento de la página)
+        Existencia existencia = existenciasPage.getContent().get(0);
+
+        // Verificar si hay suficiente cantidad disponible
+        if (existencia.getCantidad() < cantidad) {
+            throw new RuntimeException("No hay suficiente cantidad en la existencia más antigua.");
+        }
+
+        // Reducir la cantidad de la existencia
+        existencia.setCantidad(existencia.getCantidad() - cantidad);
+
+        if (existencia.getCantidad() == 0) {
+            existenciaRepository.delete(existencia);
+            return convertirAExistenciaDTO(existencia);
+        } else {
+            return convertirAExistenciaDTO(existenciaRepository.save(existencia));
+        }
     }
 
     /**

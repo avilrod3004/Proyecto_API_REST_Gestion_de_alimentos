@@ -67,6 +67,19 @@ public class ExistenciaController {
     }
 
     /**
+     * Endpoint para consumir una cantidad de un alimento en una ubicación.
+     * @param idAlimento Id del alimento
+     * @param idUbicacion Id de la ubicación
+     * @param cantidad Cantidad a consumir
+     * @return Existencia actualizada
+     */
+    @PostMapping("/consumir")
+    public ResponseEntity<ExistenciaDTO> consumirExistencia(@RequestParam Long idAlimento, @RequestParam Long idUbicacion, @RequestParam Long cantidad) {
+        ExistenciaDTO existenciaActualizada = existenciaService.consumirExistencia(idAlimento, idUbicacion, cantidad);
+        return ResponseEntity.ok(existenciaActualizada);
+    }
+
+    /**
      * Eliminar una existencia
      * @param id Identificador de la existencia
      * @return
