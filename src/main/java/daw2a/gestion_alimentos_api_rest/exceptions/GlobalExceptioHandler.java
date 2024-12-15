@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
  * en la aplicación. Los métodos de esta clase proporcionan respuestas adecuadas para los diferentes tipos
  * de errores que pueden ocurrir durante el ciclo de vida de las solicitudes HTTP.
  */
-//@ControllerAdvice
+@ControllerAdvice
 public class GlobalExceptioHandler {
 
     /**
