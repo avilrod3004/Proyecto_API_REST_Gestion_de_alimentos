@@ -25,16 +25,15 @@ public class WebConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
-        config.addAllowedOrigin("http://localhost:3000"); // Dominio permitido (cambiar según el dominio de frontend)
-        config.addAllowedHeader("*"); // Permite todos los headers
+        config.addAllowedOrigin("http://localhost:3000");
+        config.addAllowedHeader("*");
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
-        config.setAllowCredentials(true); // Permite credenciales (cookies, etc.)
-        config.setMaxAge(3600L); // Tiempo de vida de la configuración
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
 
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
-        // Retornar el filtro CORS configurado
         return new CorsFilter(source);
     }
 }
