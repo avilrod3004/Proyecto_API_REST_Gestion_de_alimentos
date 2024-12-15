@@ -1,5 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.dto.alimento;
 
+import jakarta.annotation.Nullable;
 import lombok.Data;
 import jakarta.validation.constraints.Pattern;
 
@@ -32,7 +33,6 @@ public class ModificarAlimentoDTO {
      *
      * @implNote Este campo es opcional y puede estar vacío si no se desea modificar.
      */
-    @Pattern(regexp = "PERECEDERO|NO PERECEDERO", message = "El tipo de alimento debe ser 'PERECEDERO' o 'NO PERECEDERO'.")
     private String tipo;
 
     /**
@@ -42,7 +42,6 @@ public class ModificarAlimentoDTO {
      *
      * @implNote Este campo es opcional y solo debe actualizarse si es necesario.
      */
-    @Pattern(regexp = "ABIERTO|CERRADO", message = "El estado del alimento debe ser 'ABIERTO' o 'CERRADO'.")
     private String estado;
 
     /**

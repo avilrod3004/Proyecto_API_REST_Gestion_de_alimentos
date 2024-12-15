@@ -34,6 +34,5 @@ public class ModificarUsuarioDTO {
      * Rol del usuario.
      * <p>Este campo es opcional. Si se proporciona, define el rol del usuario. Debe ser 'USUARIO' o 'ADMINISTRADOR'.</p>
      */
-    @Pattern(regexp = "USUARIO|ADMINISTRADOR", message = "El rol debe der 'USUARIO' o 'ADMINISTRADOR'.")
     private String rol;
 }
