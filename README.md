@@ -30,11 +30,11 @@ Este proyecto es una API RESTful para gestionar la información sobre alimentos,
    docker-compose up --build
    ```
 
-Esto construirá y arrancará los contenedores necesarios para la aplicación.
+Esto construirá y arrancará el contenedor necesario para la aplicación.
 
 3. **Lanzar la aplicación:**
 
-   Una vez que los contenedores estén corriendo, puedes acceder a la aplicación. La API estará disponible en `http://localhost:8080` (o el puerto configurado).
+   Una vez que los contenedores estén corriendo, puedes acceder a la aplicación. La API estará disponible en `http://localhost:8080`.
 
 4. **Consultar la documentación:**
 
