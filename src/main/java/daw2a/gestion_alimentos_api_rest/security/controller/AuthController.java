@@ -18,6 +18,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controlador encargado de gestionar la autenticación, el registro de usuarios y el cierre de sesión.
+ * Utiliza JWT para la autenticación y maneja las cookies de sesión de los usuarios.
+ */
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -27,7 +31,14 @@ public class AuthController {
     private final UsuarioService usuarioService;
     private final TokenBlacklistService tokenBlacklistService;
 
-
+    /**
+     * Constructor que inyecta las dependencias necesarias para la autenticación y el registro de usuarios.
+     *
+     * @param authenticationManager El administrador de autenticación de Spring Security.
+     * @param jwtUtil Utilidad para generar y validar tokens JWT.
+     * @param usuarioService Servicio para gestionar los usuarios.
+     * @param tokenBlacklistService Servicio para gestionar la lista negra de tokens.
+     */
     public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UsuarioService usuarioService, TokenBlacklistService tokenBlacklistService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
@@ -35,6 +46,14 @@ public class AuthController {
         this.tokenBlacklistService = tokenBlacklistService;
     }
 
+    /**
+     * Endpoint para autenticar a un usuario y generar un token JWT.
+     * <p>El token se devuelve en la respuesta y se guarda en una cookie HTTP para el cliente.</p>
+     *
+     * @param request Datos de inicio de sesión del usuario (email y contraseña).
+     * @param response La respuesta HTTP donde se añadirá la cookie con el token JWT.
+     * @return Un objeto {@link AuthResponse} que contiene el token JWT generado.
+     */
     @PostMapping("/authenticate")
     public AuthResponse authenticate(@RequestBody LoginUsuarioDTO request, HttpServletResponse response) {
         Authentication authentication = authenticationManager.authenticate(
@@ -53,7 +72,14 @@ public class AuthController {
         return new AuthResponse(token);
     }
 
-    // Logout
+    /**
+     * Endpoint para cerrar sesión de un usuario.
+     * <p>El token JWT es añadido a la lista negra y la cookie con el token se elimina.</p>
+     *
+     * @param request La solicitud HTTP que puede contener un token en el encabezado de autorización o en la cookie.
+     * @param response La respuesta HTTP donde se eliminará la cookie con el token.
+     * @return Una respuesta indicando si el cierre de sesión fue exitoso o si no se encontró un token válido.
+     */
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         // Manejar el token desde el encabezado Authorization
@@ -90,7 +116,14 @@ public class AuthController {
         return ResponseEntity.badRequest().body("No se encontró un token válido para cerrar sesión.");
     }
 
-    // Registro de usuario
+    /**
+     * Endpoint para registrar un nuevo usuario.
+     *
+     * <p>El usuario es creado en la base de datos y se genera un token JWT para su autenticación.</p>
+     *
+     * @param crearUsuarioDTO Los datos necesarios para crear un nuevo usuario (nombre, email, contraseña, etc.).
+     * @return Un objeto {@link AuthResponse} que contiene el token JWT generado para el nuevo usuario.
+     */
     @PostMapping("/register")
     public AuthResponse register(@RequestBody @Valid CrearUsuarioDTO crearUsuarioDTO) {
         // Registrar usuario usando el servicio
