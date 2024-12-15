@@ -83,6 +83,7 @@ public class SecurityConfig {
                         .requestMatchers("/existencias/**").hasAnyRole("ADMINISTRADOR", "USUARIO")
                         .requestMatchers(("/ubicaciones/**")).hasAnyRole("ADMINISTRADOR","USUARIO")
                         .requestMatchers("/usuarios/vista").hasRole("ADMINISTRADOR")
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated() // Requiere autenticación para otras rutas
                 )
                 .httpBasic(Customizer.withDefaults()) // Habilitar Basic Authentication

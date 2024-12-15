@@ -62,6 +62,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             chain.doFilter(request, response);
             return;
         }
+        if (requestPath.equals("/swagger-ui.html") || requestPath.startsWith("/v3/api-docs")) {
+            chain.doFilter(request, response);
+            return;
+        }
 
         String username = null;
         String jwt = null;
