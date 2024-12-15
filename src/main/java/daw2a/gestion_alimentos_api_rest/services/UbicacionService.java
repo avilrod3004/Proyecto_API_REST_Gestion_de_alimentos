@@ -15,6 +15,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Servicio encargado de gestionar las ubicaciones en el sistema,
+ * incluyendo la creación, actualización, eliminación y consulta de ubicaciones.
+ */
 @Service
 public class UbicacionService {
     private final UbicacionRepository ubicacionRepository;
@@ -26,10 +30,11 @@ public class UbicacionService {
     }
 
     /**
-     * Listar todas las ubicaciones o las ubicaciones de un tipo de ubicacion
-     * @param tipoUbicacion Tipo de ubicacion (alacena, nevera o congelador)
-     * @param pageable Pageable
-     * @return Listado de las ubicaciones
+     * Listar todas las ubicaciones o las ubicaciones de un tipo específico.
+     *
+     * @param tipoUbicacion Tipo de ubicación (alacena, nevera o congelador).
+     * @param pageable Objeto Pageable para la paginación de resultados.
+     * @return Listado de ubicaciones en forma de una página.
      */
     public Page<?> listarUbicaciones(String tipoUbicacion, Pageable pageable) {
         Page<Ubicacion> ubicaciones;
@@ -44,10 +49,11 @@ public class UbicacionService {
     }
 
     /**
-     * Obtener los detalles de una ubicación identificandola por su id
-     * @param id Identificador de la ubicación
-     * @return Detalles de la ubicación
-     * @throws RecursoNoEncontradoException Si no hay una ubicación con esa id
+     * Obtener los detalles de una ubicación identificada por su id.
+     *
+     * @param id Identificador de la ubicación.
+     * @return Detalles de la ubicación.
+     * @throws RecursoNoEncontradoException Si no existe una ubicación con ese id.
      */
     public UbicacionDTO obtenerUbicacion(Long id) {
         Ubicacion ubicacion = ubicacionRepository.findById(id)
@@ -57,9 +63,10 @@ public class UbicacionService {
     }
 
     /**
-     * Calcula la cantidad total, el espacio ocupado y disponible de un tipo de ubicación
-     * @param tipoUbicacion Tipo de ubicación (nevera, alacena o congelador)
-     * @return Espacio del tipo de ubicacion
+     * Calcula el espacio total, el espacio ocupado y el espacio disponible para un tipo de ubicación específico.
+     *
+     * @param tipoUbicacion Tipo de ubicación (nevera, alacena o congelador).
+     * @return Información sobre el espacio total, ocupado y disponible para el tipo de ubicación especificado.
      */
     public UbicacionEspacioDTO obtenerEscapcioPorTipoUbicacion(String tipoUbicacion) {
         List<Ubicacion> ubicaciones = ubicacionRepository.findByTipoUbicacionContainingIgnoreCase(tipoUbicacion, null).getContent();
@@ -85,9 +92,10 @@ public class UbicacionService {
     }
 
     /**
-     * Crear una ubicacion nueva
-     * @param crearUbicacionDTO Detalles de la nueva ubicación
-     * @return Ubicación creada
+     * Crear una nueva ubicación en el sistema.
+     *
+     * @param crearUbicacionDTO Datos de la nueva ubicación a crear.
+     * @return La ubicación creada.
      */
     public UbicacionDTO crearUbicacion(CrearUbicacionDTO crearUbicacionDTO) {
         Ubicacion ubicacion = new Ubicacion();
@@ -99,11 +107,12 @@ public class UbicacionService {
     }
 
     /**
-     * Actualizar los datos de una ubicación existente
-     * @param id Identificador de la ubicacion
-     * @param modificarUbicacionDTO Datos actualizados
-     * @return Ubicacion actualizada
-     * @throws RecursoNoEncontradoException Si no hay una ubicación con esa id
+     * Actualizar los datos de una ubicación existente.
+     *
+     * @param id Identificador de la ubicación a actualizar.
+     * @param modificarUbicacionDTO Datos actualizados de la ubicación.
+     * @return La ubicación actualizada.
+     * @throws RecursoNoEncontradoException Si no existe una ubicación con ese id.
      */
     public UbicacionDTO editarUbicacion(Long id, ModificarUbicacionDTO modificarUbicacionDTO) {
         Ubicacion ubicacion = ubicacionRepository.findById(id)
@@ -123,8 +132,10 @@ public class UbicacionService {
     }
 
     /**
-     * Eliminar ubicación
-     * @param id Identificación de la ubicacion
+     * Eliminar una ubicación del sistema.
+     *
+     * @param id Identificador de la ubicación a eliminar.
+     * @throws RecursoNoEncontradoException Si no existe una ubicación con ese id.
      */
     public void eliminarUbicacion(Long id) {
         Ubicacion ubicacion = ubicacionRepository.findById(id)
@@ -134,9 +145,10 @@ public class UbicacionService {
     }
 
     /**
-     * Convertir ubicacion a ubicacionDTO
-     * @param ubicacion Entidad ubicacion
-     * @return DTO de ubicacion
+     * Convertir una entidad Ubicacion a un DTO UbicacionDTO.
+     *
+     * @param ubicacion Entidad de la ubicación.
+     * @return El DTO correspondiente a la ubicación.
      */
     private UbicacionDTO convertirAUbicacionDTO(Ubicacion ubicacion) {
         UbicacionDTO ubicacionDTO = new UbicacionDTO();

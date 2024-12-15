@@ -15,8 +15,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
- * Servicio para gestionar operaciones relacionadas con los usuarios
- * Proporciona funcionalidades de creación, actualización, eliminación y consulta de usuarios
+ * Servicio para gestionar operaciones relacionadas con los usuarios.
+ * Proporciona funcionalidades de creación, actualización, eliminación y consulta de usuarios.
  */
 @Service
 public class UsuarioService {
@@ -24,9 +24,10 @@ public class UsuarioService {
     private final PasswordEncoder passwordEncoder;
 
     /**
-     * Contructor para inyección de dependencias
-     * @param usuarioRepository Repositorio de usuarios
-     * @param passwordEncoder Codificador de contraseñas
+     * Constructor para inyección de dependencias.
+     *
+     * @param usuarioRepository Repositorio de usuarios.
+     * @param passwordEncoder Codificador de contraseñas.
      */
     public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
@@ -34,10 +35,11 @@ public class UsuarioService {
     }
 
     /**
-     * Listar usuarios con soporte de paginación y filtrado opcional por nombre
-     * @param nombre Filtrado opcional por nombre del usuario
-     * @param pageable Configuración de paginación
-     * @return Página de usuarios en formato DTO de listado
+     * Listar usuarios con soporte de paginación y filtrado opcional por nombre.
+     *
+     * @param nombre Filtrado opcional por nombre del usuario.
+     * @param pageable Configuración de paginación.
+     * @return Página de usuarios en formato DTO de listado.
      */
     public Page<UsuarioDTO> listarUsuarios(String nombre, Pageable pageable) {
         Page<Usuario> usuarios;
@@ -52,10 +54,11 @@ public class UsuarioService {
     }
 
     /**
-     * Obtiene los detalles de un usuario por su id
-     * @param id Identificador del usuario
-     * @return Detalles del usuario en formato DTO
-     * @throws RecursoNoEncontradoException Si no se encuentra el usuario
+     * Obtiene los detalles de un usuario por su id.
+     *
+     * @param id Identificador del usuario.
+     * @return Detalles del usuario en formato DTO.
+     * @throws RecursoNoEncontradoException Si no se encuentra el usuario con el id proporcionado.
      */
     public UsuarioDetallesDTO buscarUsuarioPorId(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
@@ -65,10 +68,11 @@ public class UsuarioService {
     }
 
     /**
-     * Obtiene los detalles de un usuario por su correo electronico
-     * @param email Correo electronico del usuario
-     * @return Detalles del usuario en formato DTO
-     * @throws RecursoNoEncontradoException Si no se encuentra el usuario
+     * Obtiene los detalles de un usuario por su correo electrónico.
+     *
+     * @param email Correo electrónico del usuario.
+     * @return Detalles del usuario en formato DTO.
+     * @throws RecursoNoEncontradoException Si no se encuentra el usuario con el correo electrónico proporcionado.
      */
     public UsuarioDetallesDTO buscarUsuarioPorEmail(String email) {
         Usuario usuario = usuarioRepository.findUsuarioByEmail(email)
@@ -78,10 +82,11 @@ public class UsuarioService {
     }
 
     /**
-     * Crear un usuario nuevo en el sistema
-     * @param crearUsuarioDTO Datos para crear el usuario
-     * @return Detalles del usuario creado
-     * @throws RecursoDuplicadoException Si el email ya está en uso
+     * Crea un usuario nuevo en el sistema.
+     *
+     * @param crearUsuarioDTO Datos para crear el usuario.
+     * @return Detalles del usuario creado en formato DTO.
+     * @throws RecursoDuplicadoException Si el email ya está en uso.
      */
     public UsuarioDetallesDTO crearUsuario(CrearUsuarioDTO crearUsuarioDTO) {
         if (usuarioRepository.findUsuarioByEmail(crearUsuarioDTO.getEmail()).isPresent()) {
@@ -120,11 +125,12 @@ public class UsuarioService {
     }
 
     /**
-     * Actualizar un usuario existente
-     * @param id Identificador del usuario
-     * @param modificarUsuarioDTO Detalles para modificar el usuario
-     * @return Detalles del usuario actualizado
-     * @throws RecursoNoEncontradoException Si el usuario no existe
+     * Actualiza un usuario existente.
+     *
+     * @param id Identificador del usuario.
+     * @param modificarUsuarioDTO Detalles para modificar el usuario.
+     * @return Detalles del usuario actualizado en formato DTO.
+     * @throws RecursoNoEncontradoException Si el usuario con el id proporcionado no existe.
      */
     public UsuarioDetallesDTO editarUsuario(Long id, ModificarUsuarioDTO modificarUsuarioDTO) {
         Usuario usuario = usuarioRepository.findById(id)
@@ -147,9 +153,10 @@ public class UsuarioService {
     }
 
     /**
-     * Elimina un usuario existente
-     * @param id Identificador del usuario
-     * @throws RecursoNoEncontradoException Si el usuario no existe
+     * Elimina un usuario existente.
+     *
+     * @param id Identificador del usuario.
+     * @throws RecursoNoEncontradoException Si el usuario con el id proporcionado no existe.
      */
     public void eliminarUsuario(Long id) {
         Usuario usuario = usuarioRepository.findById(id)
@@ -159,9 +166,10 @@ public class UsuarioService {
     }
 
     /**
-     * Convierte una entidad usuario a un DTO con los datos basicos
-     * @param usuario Entidad de usuario
-     * @return DTO con detalles del usuario
+     * Convierte una entidad usuario a un DTO con los datos básicos.
+     *
+     * @param usuario Entidad de usuario.
+     * @return DTO con detalles básicos del usuario.
      */
     private UsuarioDTO convertirAUsuarioDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
@@ -173,9 +181,10 @@ public class UsuarioService {
     }
 
     /**
-     * Convierte una entidad usuario a un DTO con detalles
-     * @param usuario Entidad de usuario
-     * @return DTO con detalles del usuario
+     * Convierte una entidad usuario a un DTO con detalles completos.
+     *
+     * @param usuario Entidad de usuario.
+     * @return DTO con detalles completos del usuario.
      */
     private UsuarioDetallesDTO convertirAUsuarioDetallesDTO(Usuario usuario) {
         UsuarioDetallesDTO usuarioDetallesDTO = new UsuarioDetallesDTO();

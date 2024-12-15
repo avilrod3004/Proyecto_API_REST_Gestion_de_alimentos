@@ -1,7 +1,6 @@
 package daw2a.gestion_alimentos_api_rest.services;
 
 import daw2a.gestion_alimentos_api_rest.dto.existencia.*;
-import daw2a.gestion_alimentos_api_rest.dto.ubicacion.UbicacionEspacioDTO;
 import daw2a.gestion_alimentos_api_rest.entities.Alimento;
 import daw2a.gestion_alimentos_api_rest.entities.Existencia;
 import daw2a.gestion_alimentos_api_rest.entities.Ubicacion;
@@ -20,24 +19,30 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Servicio encargado de gestionar las operaciones relacionadas con las existencias de alimentos
+ * en ubicaciones específicas dentro del sistema de gestión de alimentos.
+ */
 @Service
 public class ExistenciaService {
     private final ExistenciaRepository existenciaRepository;
     private final AlimentoRepository alimentoRepository;
     private final UbicacionRepository ubicacionRepository;
-    private final UbicacionService ubicacionService;
 
-    public ExistenciaService(ExistenciaRepository existenciaRepository, AlimentoRepository alimentoRepository, UbicacionRepository ubicacionRepository, UbicacionService ubicacionService) {
+    public ExistenciaService(ExistenciaRepository existenciaRepository, AlimentoRepository alimentoRepository, UbicacionRepository ubicacionRepository) {
         this.existenciaRepository = existenciaRepository;
         this.alimentoRepository = alimentoRepository;
         this.ubicacionRepository = ubicacionRepository;
-        this.ubicacionService = ubicacionService;
     }
 
     /**
-     * Listar todas las existencias, por id de alimento y/o por id de la ubicacion
-     * @param pageable Pageable
-     * @return Listado de existencias
+     * Lista las existencias de alimentos filtradas por id de alimento, id de ubicación o ambas.
+     * Si no se proporciona filtro, devuelve todas las existencias.
+     *
+     * @param idAlimento Id del alimento a filtrar (opcional).
+     * @param idUbicacion Id de la ubicación a filtrar (opcional).
+     * @param pageable Objeto de paginación para controlar los resultados.
+     * @return Un Page con los objetos ExistenciaDTO que representan las existencias.
      */
     public Page<ExistenciaDTO> listarExistencias(Long idAlimento, Long idUbicacion, Pageable pageable) {
         Page<Existencia> existencias;
@@ -56,11 +61,12 @@ public class ExistenciaService {
     }
 
     /**
-     * Listar existencias que caducan dentro de un rango de fechas y agrupados por su ubicación
-     * @param size Número de existencias por página
-     * @param fechaInicio Fecha de inicio del rango
-     * @param fechaFin Fecha de fin del rango
-     * @return Listado de existencias
+     * Lista las existencias que caducan dentro de un rango de fechas, agrupadas por su ubicación.
+     *
+     * @param size Número de elementos por página.
+     * @param fechaInicio Fecha de inicio del rango.
+     * @param fechaFin Fecha de fin del rango.
+     * @return Un Page con los objetos ExistenciaDetallesDTO que representan las existencias y detalles adicionales.
      */
     public Page<ExistenciaDetallesDTO> listadoCaducanPorUbicacion(int size, LocalDate fechaInicio, LocalDate fechaFin) {
         int page = 0;
@@ -72,10 +78,11 @@ public class ExistenciaService {
     }
 
     /**
-     * Obtener los detalles de una existencia
-     * @param id Identificador de la existencia
-     * @return Existencia
-     * @throws RecursoNoEncontradoException si no existe una existencia con el id dado
+     * Consulta los detalles de una existencia de alimento en una ubicación específica.
+     *
+     * @param id Identificador de la existencia.
+     * @return El DTO de la existencia.
+     * @throws RecursoNoEncontradoException Si no se encuentra la existencia con el id proporcionado.
      */
     public ExistenciaDTO consultarExistencia(Long id) {
         Existencia existencia = existenciaRepository.findById(id)
@@ -85,10 +92,13 @@ public class ExistenciaService {
     }
 
     /**
-     * Registrar una existencia nueva
-     * @param nuevaExistencia Datos de la nueva existencia
-     * @return Datos de la nueva existencia
-     * @throws RecursoNoEncontradoException si el id del alimento o el id de la ubicacion no existe
+     * Registra una nueva existencia de alimento en una ubicación específica.
+     * Verifica si la ubicación tiene suficiente capacidad antes de permitir la creación de la existencia.
+     *
+     * @param nuevaExistencia DTO con los datos necesarios para crear la nueva existencia.
+     * @return El DTO de la nueva existencia creada.
+     * @throws RecursoNoEncontradoException Si no se encuentra el alimento o la ubicación.
+     * @throws UbicacionLlenaException Si la ubicación está llena y no tiene capacidad suficiente.
      */
     @Transactional
     public ExistenciaDTO crearExistencia(CrearExistenciaDTO nuevaExistencia) {
@@ -121,11 +131,12 @@ public class ExistenciaService {
     }
 
     /**
-     * Actualizar la cantidad de la existencia
-     * @param id Identificador de la existencia
-     * @param modificarExistenciaDTO Dato que se va ha modificar
-     * @return Existencia actualizada
-     * @throws RecursoNoEncontradoException Si no hay una existencia con ese id
+     * Actualiza la cantidad de una existencia existente.
+     *
+     * @param id Identificador de la existencia a actualizar.
+     * @param modificarExistenciaDTO DTO con el dato de cantidad a modificar.
+     * @return El DTO con los datos de la existencia actualizada.
+     * @throws RecursoNoEncontradoException Si no se encuentra la existencia con el id proporcionado.
      */
     @Transactional
     public ExistenciaDTO actualizarCantidad(Long id, ModificarExistenciaDTO modificarExistenciaDTO) {
@@ -137,11 +148,12 @@ public class ExistenciaService {
     }
 
     /**
-     * Mover existencia de ubicación
-     * @param id Identificador de la existencia
-     * @param moverExistenciaDTO Datos de la ubicación nueva
-     * @return Detalles actualizados
-     * @throws RecursoNoEncontradoException Si no existe una existencia con ese id o una ubicacion con ese id
+     * Mueve una existencia de un alimento de una ubicación a otra.
+     *
+     * @param id Identificador de la existencia a mover.
+     * @param moverExistenciaDTO DTO con el id de la nueva ubicación.
+     * @return El DTO de la existencia con la nueva ubicación.
+     * @throws RecursoNoEncontradoException Si no se encuentra la existencia o la ubicación con los ids proporcionados.
      */
     @Transactional
     public ExistenciaDTO moverExistencia(Long id, MoverExistenciaDTO moverExistenciaDTO) {
@@ -156,12 +168,14 @@ public class ExistenciaService {
     }
 
     /**
-     * Consume una existencia de un alimento en una ubicación.
-     * Reduce la cantidad del alimento en la ubicación seleccionada, priorizando la existencia con la fecha más antigua.
-     * @param idAlimento Id del alimento
-     * @param idUbicacion Id de la ubicación
-     * @param cantidad Cantidad a consumir
-     * @return Existencia actualizada
+     * Consume una cantidad específica de un alimento en una ubicación, reduciendo la cantidad
+     * de la existencia más antigua.
+     *
+     * @param idAlimento Id del alimento que se va a consumir.
+     * @param idUbicacion Id de la ubicación donde se encuentra el alimento.
+     * @param cantidad Cantidad a consumir.
+     * @return El DTO de la existencia actualizada.
+     * @throws RuntimeException Si no hay suficiente cantidad o no hay existencias disponibles.
      */
     @Transactional
     public ExistenciaDTO consumirExistencia(Long idAlimento, Long idUbicacion, Long cantidad) {
@@ -190,9 +204,10 @@ public class ExistenciaService {
     }
 
     /**
-     * Eliminar una existencia
-     * @param id Identificador de la existencia
-     * @throws RecursoNoEncontradoException si no hay una existencia con ese id
+     * Elimina una existencia de alimento en una ubicación específica.
+     *
+     * @param id Identificador de la existencia a eliminar.
+     * @throws RecursoNoEncontradoException Si no se encuentra la existencia con el id proporcionado.
      */
     public void eliminarExistencia(Long id) {
         Existencia existencia = existenciaRepository.findById(id)
@@ -202,9 +217,10 @@ public class ExistenciaService {
     }
 
     /**
-     * Convertir de Existencia a ExistenciaDTO
-     * @param existencia Entidad
-     * @return DTO
+     * Convierte una entidad Existencia a su correspondiente DTO ExistenciaDTO.
+     *
+     * @param existencia La entidad Existencia a convertir.
+     * @return El DTO ExistenciaDTO.
      */
     private ExistenciaDTO convertirAExistenciaDTO(Existencia existencia) {
         ExistenciaDTO existenciaDTO = new ExistenciaDTO();
@@ -224,9 +240,11 @@ public class ExistenciaService {
     }
 
     /**
-     * Convertir de Existencia a ExistenciaDetallesDTO
-     * @param existencia Entidad existencia
-     * @return DTO con detalles extra de la existencia
+     * Convierte una entidad Existencia a su correspondiente DTO ExistenciaDetallesDTO,
+     * añadiendo detalles adicionales sobre la existencia.
+     *
+     * @param existencia La entidad Existencia a convertir.
+     * @return El DTO ExistenciaDetallesDTO.
      */
     private ExistenciaDetallesDTO convertirAExistenciaDetallesDTO(Existencia existencia) {
         ExistenciaDetallesDTO existenciaDetallesDTO = new ExistenciaDetallesDTO();
