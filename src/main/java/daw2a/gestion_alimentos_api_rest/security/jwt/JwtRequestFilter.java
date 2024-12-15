@@ -7,7 +7,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -16,6 +15,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtro de solicitud JWT que valida y autentica las solicitudes que contienen un token JWT.
+ *
+ * <p>Este filtro intercepta las solicitudes entrantes, extrae el token JWT de los encabezados de autorización
+ * o cookies, valida el token y, si es válido, autentica al usuario en el contexto de seguridad de Spring.</p>
+ */
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
@@ -23,12 +28,29 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final TokenBlacklistService tokenBlacklistService;
     private final JwtUtil jwtUtil;
 
+    /**
+     * Constructor para inicializar el filtro con los servicios necesarios.
+     *
+     * @param userDetailsService Servicio para cargar los detalles del usuario.
+     * @param tokenBlacklistService Servicio para verificar si el token está en la blacklist.
+     * @param jwtUtil Utilidad para manejar los tokens JWT.
+     */
     public JwtRequestFilter(CustomUserDetailsService userDetailsService, TokenBlacklistService tokenBlacklistService, JwtUtil jwtUtil) {
         this.userDetailsService = userDetailsService;
         this.tokenBlacklistService = tokenBlacklistService;
         this.jwtUtil = jwtUtil;
     }
 
+    /**
+     * Filtra las solicitudes entrantes, extrayendo y validando el token JWT.
+     * Si el token es válido, autentica al usuario.
+     *
+     * @param request La solicitud HTTP entrante.
+     * @param response La respuesta HTTP que se enviará.
+     * @param chain La cadena de filtros que sigue después de este filtro.
+     * @throws ServletException Si ocurre un error durante el procesamiento del filtro.
+     * @throws IOException Si ocurre un error durante el procesamiento de la solicitud o la respuesta.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
@@ -86,7 +108,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response);
     }
 
-    // Método para limpiar la cookie
+    /**
+     * Elimina la cookie de token JWT de la respuesta HTTP.
+     *
+     * @param response La respuesta HTTP.
+     */
     private void limpiarCookie(HttpServletResponse response) {
         Cookie jwtCookie = new Cookie("jwt", null);
         jwtCookie.setPath("/");
