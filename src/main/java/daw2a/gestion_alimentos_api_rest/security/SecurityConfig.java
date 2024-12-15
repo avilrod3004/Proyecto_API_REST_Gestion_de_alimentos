@@ -16,6 +16,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Configuración de seguridad de la aplicación.
+ * Esta clase define la configuración de seguridad utilizando Spring Security, incluyendo la protección de endpoints,
+ * el uso de JWT para autenticación y la configuración de roles y permisos.
+ *
+ * <p>Se habilita la autenticación básica, se configura la política de sesiones para ser stateless,
+ * y se establece un filtro JWT para manejar las solicitudes de autenticación.</p>
+ */
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
@@ -23,21 +31,48 @@ public class SecurityConfig {
     private final JwtRequestFilter jwtRequestFilter;
     private final CustomUserDetailsService customUserDetailsService;
 
+    /**
+     * Constructor que inyecta las dependencias necesarias para la configuración de seguridad.
+     *
+     * @param jwtRequestFilter Filtro para manejar las solicitudes de JWT.
+     * @param customUserDetailsService Servicio para cargar detalles de usuario personalizados.
+     */
     public SecurityConfig(JwtRequestFilter jwtRequestFilter, CustomUserDetailsService customUserDetailsService) {
         this.jwtRequestFilter = jwtRequestFilter;
         this.customUserDetailsService = customUserDetailsService;
     }
 
+    /**
+     * Bean para definir el encoder de contraseñas.
+     * <p>Utiliza el algoritmo BCrypt para encriptar las contraseñas de los usuarios.</p>
+     *
+     * @return Un objeto {@link PasswordEncoder} que implementa el algoritmo BCrypt.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Bean para crear el {@link AuthenticationManager} a partir de la configuración de autenticación.
+     *
+     * @param authConfig Configuración de autenticación que permite la creación del {@link AuthenticationManager}.
+     * @return El {@link AuthenticationManager} configurado.
+     * @throws Exception Si ocurre un error al obtener el AuthenticationManager.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
+    /**
+     * Bean para configurar la cadena de seguridad, que define las reglas de acceso a los diferentes endpoints
+     * y la política de gestión de sesiones.
+     *
+     * @param http Objeto {@link HttpSecurity} utilizado para configurar la seguridad HTTP.
+     * @return La configuración de seguridad con las reglas definidas.
+     * @throws Exception Si ocurre un error durante la configuración de la seguridad HTTP.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
